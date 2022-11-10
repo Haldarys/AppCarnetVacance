@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">AppProjet</string>
     <string name="Home">Home</string>
-    <string name="List">List</string>
+    <string name="List">Holidays List</string>
     <string name="TempScreen">Temp</string>
     <string name="back">Back</string>
+    <string name="create_holiday">Create Holiday</string>
+    <string name="edit_holiday">Edit Holiday</string>
+    <string name="holiday_details">Details</string>
 </resources>

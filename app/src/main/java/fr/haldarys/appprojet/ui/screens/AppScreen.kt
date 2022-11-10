@@ -1,6 +1,7 @@
 package fr.haldarys.appprojet.ui.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,37 +10,41 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import fr.haldarys.appprojet.R
 
-sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon : ImageVector) {
+sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
     object Home : Screen("home", R.string.Home, Icons.Filled.Home)
-    object List : Screen("list", R.string.List, Icons.Filled.List)
+    object HolidayList : Screen("list", R.string.List, Icons.Filled.List)
     object TempScreen1 : Screen("temp_screen_1", R.string.TempScreen, Icons.Filled.Warning)
 }
 
 val MainScreens = listOf(
     Screen.Home,
-    Screen.List,
+    Screen.HolidayList,
     Screen.TempScreen1,
 )
 
 @Composable
-fun TopBar(@StringRes title: Int,
-           canNavigateBack: Boolean,
-           modifier: Modifier = Modifier,
-           navigateBack: ()->Unit) {
+fun TopBar(
+    @StringRes title: Int,
+    canNavigateBack: Boolean,
+    modifier: Modifier = Modifier,
+    navigateBack: () -> Unit
+) {
     TopAppBar(
         title = { Text(stringResource(id = title)) },
         modifier = modifier,
         navigationIcon = {
-            if(canNavigateBack) {
+            if (canNavigateBack) {
                 IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -52,7 +57,11 @@ fun TopBar(@StringRes title: Int,
 }
 
 @Composable
-fun BottomBar(navController: NavController, modifier: Modifier = Modifier, onNavigate: (Screen)->Unit) {
+fun BottomBar(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    onNavigate: (Screen) -> Unit
+) {
     BottomNavigation(modifier) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -83,7 +92,7 @@ fun BottomBar(navController: NavController, modifier: Modifier = Modifier, onNav
 }
 
 @Composable
-fun AppScreen(modifier: Modifier = Modifier){
+fun AppScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var currentScreenTitle by remember {
@@ -104,12 +113,36 @@ fun AppScreen(modifier: Modifier = Modifier){
             BottomBar(navController, modifier) {
                 currentScreenTitle = it.resourceId
             }
-        }) {
-            innerPadding ->
-        NavHost(navController, startDestination = Screen.Home.route, Modifier.padding(innerPadding)) {
-            composable(Screen.Home.route) { Home(navController) }
-            composable(Screen.List.route) { List(navController) }
-            composable(Screen.TempScreen1.route) { TempScreen1(navController) }
-        }
+        }) { innerPadding ->
+        AppBody(innerPadding = innerPadding,
+            navController = navController,
+            modifier = modifier,
+            onTitleChanged = {
+                currentScreenTitle = it;
+            },
+            onCanNavigateBackChanged = {
+                canNavigateBack = it
+            })
+    }
+}
+
+
+@Composable
+fun AppBody(
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues = PaddingValues(Dp(10.0f)),
+    navController: NavHostController,
+    onTitleChanged: (Int) -> Unit,
+    onCanNavigateBackChanged: (Boolean) -> Unit
+) {
+    NavHost(navController, startDestination = Screen.Home.route, Modifier.padding(innerPadding)) {
+        composable(Screen.Home.route) { Home(navController) }
+        createHolidayGraph(
+            navController = navController,
+            modifier,
+            onTitleChanged = onTitleChanged,
+            onCanNavigateBackChange = onCanNavigateBackChanged
+        )
+        composable(Screen.TempScreen1.route) { TempScreen1(navController) }
     }
 }
