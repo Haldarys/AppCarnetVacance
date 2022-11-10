@@ -33,36 +33,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Page1(modifier: Modifier = Modifier, text: String) {
-    var result by remember {
-        mutableStateOf(0)
-    }
-
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(text = "$result")
-        Button(onClick = {
-            result = (0..100).random()
-        }) {
-            Text(text = "Clique moi !")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "$text !")
-    }
-}
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
     AppProjetTheme {
-        Page1(
+        AppScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center),
-            text = "Page 1 preview"
         )
     }
 }
