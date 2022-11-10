@@ -22,14 +22,12 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon 
     object Home : Screen("home", R.string.Home, Icons.Filled.Home)
     object List : Screen("list", R.string.List, Icons.Filled.List)
     object TempScreen1 : Screen("temp_screen_1", R.string.TempScreen, Icons.Filled.Warning)
-    object TempScreen2 : Screen("temp_screen_2", R.string.TempScreen, Icons.Filled.Warning)
 }
 
 val MainScreens = listOf(
     Screen.Home,
     Screen.List,
     Screen.TempScreen1,
-    Screen.TempScreen2
 )
 
 @Composable
@@ -112,7 +110,6 @@ fun AppScreen(modifier: Modifier = Modifier){
             composable(Screen.Home.route) { Home(navController) }
             composable(Screen.List.route) { List(navController) }
             composable(Screen.TempScreen1.route) { TempScreen1(navController) }
-            composable(Screen.TempScreen2.route) { TempScreen2(navController) }
         }
     }
 }
