@@ -3,4 +3,5 @@
     <string name="Home">Home</string>
     <string name="List">List</string>
     <string name="TempScreen">Temp</string>
+    <string name="back">Back</string>
 </resources>

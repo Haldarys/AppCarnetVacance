@@ -43,7 +43,7 @@ fun TopBar(@StringRes title: Int,
                 IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "back"
+                        contentDescription = stringResource(R.string.back)
                     )
                 }
             }
