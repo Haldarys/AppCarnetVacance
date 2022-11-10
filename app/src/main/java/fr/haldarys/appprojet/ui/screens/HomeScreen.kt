@@ -25,7 +25,7 @@ fun Home(navController: NavController){
         Button(onClick = {
             result = (0..100).random()
         }) {
-            Text(text = "Clique moi !")
+            Text(text = "Click me !")
         }
     }
 }
