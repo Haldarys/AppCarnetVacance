@@ -19,17 +19,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import fr.haldarys.appprojet.ui.screens.AppScreen
 import fr.haldarys.appprojet.ui.theme.AppProjetTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var fusedLocationClient : FusedLocationProviderClient;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initializeLocation()
+
         setContent {
             AppProjetTheme() {
                 AppScreen()
             }
         }
+    }
+
+    fun initializeLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 }
 
