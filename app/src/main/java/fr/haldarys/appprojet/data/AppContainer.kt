@@ -16,7 +16,7 @@ class DefaultAppContainer: AppContainer{
     }
 
     override val locationRepository: LocationRepository by lazy{
-        DefaultLocationRepository(locationSource)
+        DefaultLocationRepository()
     }
 
 

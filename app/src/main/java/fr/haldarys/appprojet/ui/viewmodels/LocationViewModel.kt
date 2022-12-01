@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.haldarys.appprojet.PlanYourHolidaysApplication
 import fr.haldarys.appprojet.data.repositories.DefaultLocationRepository
 import fr.haldarys.appprojet.data.repositories.LocationRepository
@@ -15,10 +16,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import javax.inject.Inject
 
-class LocationViewModel(private val locationRepository: LocationRepository) : ViewModel() {
+@HiltViewModel
+class LocationViewModel @Inject constructor(private val locationRepository: LocationRepository) : ViewModel() {
+
     private val _uiState = MutableStateFlow(LocationUiState(0,"","","","",""))
+
     val uiState : StateFlow<LocationUiState> = _uiState.asStateFlow()
+
     private fun getLocation(){
         viewModelScope.launch {
             try{
@@ -28,15 +34,5 @@ class LocationViewModel(private val locationRepository: LocationRepository) : Vi
             catch(e: Exception){
             }
         }
-    }
-
-    companion object{
-       val Factory : ViewModelProvider.Factory = viewModelFactory {
-           initializer{
-               val app = (this[APPLICATION_KEY] as PlanYourHolidaysApplication)
-               val locationRepo = app.container.locationRepository
-               LocationViewModel(locationRepo)
-           }
-       }
     }
 }

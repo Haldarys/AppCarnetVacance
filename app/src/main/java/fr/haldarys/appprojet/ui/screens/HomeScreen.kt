@@ -8,12 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.haldarys.appprojet.ui.viewmodels.LocationViewModel
 
 @Composable
-fun Home(navController: NavController){
-    val viewModel : LocationViewModel = viewModel(factory = LocationViewModel.Factory)
+fun Home(navController: NavController,
+         viewModel: LocationViewModel = hiltViewModel()){
     val location = viewModel.uiState.collectAsState()
     val city:String = location.value.city
 
