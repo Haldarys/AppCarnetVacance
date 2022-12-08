@@ -9,6 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import fr.haldarys.appprojet.data.models.LocationModel
 import fr.haldarys.appprojet.data.repositories.LocationSource
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -31,30 +32,30 @@ object OnlineLocationSource : LocationSource {
         .build()
 
     data class OSMLocations(
-        @Json(name = "address")
+        @field:Json(name = "address")
         val location : LocationModel
     )
 
-    data class OnlineLocationModel(
-        @Json(name = "house_number")
+        data class OnlineLocationModel(
+        @field:Json(name = "house_number")
         var roadNumber: Int,
-        @Json(name = "city")
+        @field:Json(name = "city")
         var city: String,
-        @Json(name = "road")
+        @field:Json(name = "road")
         var road: String ,
-        @Json(name = "state")
+        @field:Json(name = "state")
         var state: String,
-        @Json(name = "region")
+        @field:Json(name = "region")
         var region: String,
-        @Json(name = "postcode")
+        @field:Json(name = "postcode")
         var postCode: String ,
-        @Json(name = "country")
+        @field:Json(name = "country")
         var country: String
     )
 
     interface OSMLocationsService {
-        @GET("reverse?format=jsonv2 & lat=<latvalue>&lon=<lonvalue>")
-        fun GetLocation( @Query(value="latvalue") latvalue: String, @Query(value = "lonvalue") lonvalue : String) : OSMLocations
+        @GET("reverse")
+        suspend fun GetLocation(@Query(value="format") format: String = "jsonv2", @Query(value="lat") latvalue: String, @Query(value = "lon") lonvalue : String) : OSMLocations
     }
 
     private val retrofitOSMLocationsService : OSMLocationsService by lazy{

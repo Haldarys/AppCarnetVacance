@@ -1,5 +1,6 @@
 package fr.haldarys.appprojet.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -32,7 +33,12 @@ class LocationViewModel @Inject constructor(private val locationRepository: Loca
                 _uiState.emit(LocationUiState(roadNumber = location.roadNumber, city = location.city, road = location.road, country = location.country, state = location.state, postCode = location.postCode))
             }
             catch(e: Exception){
+                Log.e("", e.message?:"not found")
             }
         }
+    }
+
+    init {
+        getLocation()
     }
 }
