@@ -30,7 +30,7 @@ class LocationViewModel @Inject constructor(private val locationRepository: Loca
         viewModelScope.launch {
             try{
                 val location = locationRepository.getLocation(latvalue = "48.424730148122215",lonvalue = "-71.0687216220378")
-                _uiState.emit(LocationUiState(roadNumber = location.roadNumber, city = location.city, road = location.road, country = location.country, state = location.state, postCode = location.postCode))
+                _uiState.emit(LocationUiState(roadNumber = location.house_number, city = location.city, road = location.road, country = location.country, state = location.state, postCode = location.postCode))
             }
             catch(e: Exception){
                 Log.e("", e.message?:"not found")

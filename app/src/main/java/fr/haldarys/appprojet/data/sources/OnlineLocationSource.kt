@@ -9,15 +9,21 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import fr.haldarys.appprojet.data.models.LocationModel
 import fr.haldarys.appprojet.data.repositories.LocationSource
-import retrofit2.Call
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.create
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Singleton
 
 object OnlineLocationSource : LocationSource {
+    private val interceptor = HttpLoggingInterceptor()
+    init{
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+    }
+    private val client = OkHttpClient().newBuilder().addInterceptor(interceptor).build()
+
 
     private const val BASE_URL = "https://nominatim.openstreetmap.org"
 
@@ -29,27 +35,20 @@ object OnlineLocationSource : LocationSource {
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .client(client)
         .build()
 
     data class OSMLocations(
-        @field:Json(name = "address")
-        val location : LocationModel
+        val address : LocationModel
     )
 
         data class OnlineLocationModel(
-        @field:Json(name = "house_number")
-        var roadNumber: Int,
-        @field:Json(name = "city")
+        var house_number: Int,
         var city: String,
-        @field:Json(name = "road")
         var road: String ,
-        @field:Json(name = "state")
         var state: String,
-        @field:Json(name = "region")
         var region: String,
-        @field:Json(name = "postcode")
         var postCode: String ,
-        @field:Json(name = "country")
         var country: String
     )
 
@@ -63,7 +62,7 @@ object OnlineLocationSource : LocationSource {
     }
 
     override suspend fun GetLocation(latvalue: String,lonvalue: String): LocationModel {
-        return retrofitOSMLocationsService.GetLocation(latvalue = latvalue,lonvalue =lonvalue ).location
+        return retrofitOSMLocationsService.GetLocation(latvalue = latvalue,lonvalue =lonvalue ).address
     }
 }
 

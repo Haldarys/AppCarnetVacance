@@ -1,7 +1,7 @@
 package fr.haldarys.appprojet.data.models
 
 data class LocationModel (
-    var roadNumber: Int,
+    var house_number: Int,
     var city: String = "",
     var road: String = "",
     var state: String = "",
