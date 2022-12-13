@@ -5,4 +5,5 @@ data class HolidayModel(
     var name: String = "",
     var date: String = "",
     var location: String = ""
+//var visits : List<VisitModel>
 )
