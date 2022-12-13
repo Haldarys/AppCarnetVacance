@@ -1,14 +1,16 @@
 package fr.haldarys.appprojet.data.repositories
 
-import android.location.Location
-import android.os.Debug
 import android.util.Log
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import fr.haldarys.appprojet.data.models.LocationModel
 import javax.inject.Inject
+import javax.inject.Singleton
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import fr.haldarys.appprojet.PlanYourHolidaysApplication
 
 interface LocationSource{
 
@@ -20,9 +22,19 @@ interface LocationRepository{
     fun getLocationFromCache():LocationModel
 }
 
-class DefaultLocationRepository() : LocationRepository{
-    @Inject
-    lateinit var locationSource: LocationSource
+class DefaultLocationRepository @Inject constructor(): LocationRepository{
+
+    private lateinit var locationSource: LocationSource
+
+    init {
+        val appContext = PlanYourHolidaysApplication.getContext()
+        val utilitiesEntryPoint =
+            appContext?.let {
+                EntryPointAccessors.fromApplication(
+                    it, DefaultLocationRepoEntryPoint::class.java)
+            }
+        locationSource = utilitiesEntryPoint?.locationSource!!
+    }
 
     override suspend fun getLocation(latvalue: String, lonvalue: String): LocationModel {
         Log.d("app","DefaultLocationRepository")
@@ -34,11 +46,18 @@ class DefaultLocationRepository() : LocationRepository{
     }
 }
 
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface DefaultLocationRepoEntryPoint {
+    var locationSource: LocationSource
+}
+
 @InstallIn(SingletonComponent::class)
 @Module
-object GameRepositoryModule {
+object LocationRepositoryModule {
+    @Singleton
     @Provides
-    fun provideLocationRepo(): LocationRepository{
+    fun provideLocationRepo(): LocationRepository {
         return DefaultLocationRepository()
     }
 }
