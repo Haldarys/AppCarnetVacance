@@ -66,12 +66,3 @@ object OnlineLocationSource : LocationSource {
     }
 }
 
-@InstallIn(SingletonComponent::class)
-@Module
-object LocationSourceModule {
-    @Provides
-    @Singleton
-    fun provideLocationSource() : LocationSource {
-        return OnlineLocationSource;
-    }
-}

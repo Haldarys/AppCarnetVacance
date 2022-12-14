@@ -4,10 +4,12 @@ import android.app.Application
 import android.content.Context
 import dagger.hilt.android.HiltAndroidApp
 import fr.haldarys.appprojet.data.AppContainer
+import fr.haldarys.appprojet.data.AppDatabase
 import fr.haldarys.appprojet.data.DefaultAppContainer
 
 @HiltAndroidApp
 class PlanYourHolidaysApplication : Application() {
+    val database : AppDatabase by lazy { AppDatabase.getDatabase(this)}
     companion object {
         private var sApplication: Application? = null
 
