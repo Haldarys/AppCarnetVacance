@@ -1,9 +1,6 @@
 package fr.haldarys.appprojet.data.models
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.squareup.moshi.Json
 import javax.annotation.Nonnull
 
@@ -17,9 +14,8 @@ import javax.annotation.Nonnull
 */
 @Entity(tableName = "locations")
 data class LocationModel (
-    //@Transient
-    @PrimaryKey
-    val location_id : Int,
+    @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "locationId")
+    var location_id : Int = 0,
 
     @Nonnull @ColumnInfo(name = "houseNumber")
     var house_number: Int,
@@ -41,4 +37,7 @@ data class LocationModel (
 
     @ColumnInfo(name = "country")
     var country: String = ""
-)
+) {
+    constructor(house_number: Int, city: String, road: String, state: String, region: String, postCode: String, country: String)
+        : this(1, house_number, city, road, state, region, postCode, country)
+}

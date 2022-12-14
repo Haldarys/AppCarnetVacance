@@ -42,7 +42,7 @@ object OnlineLocationSource : LocationSource {
         val address : LocationModel
     )
 
-        data class OnlineLocationModel(
+    data class OnlineLocationModel(
         var house_number: Int,
         var city: String,
         var road: String ,

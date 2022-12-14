@@ -59,8 +59,7 @@ object LocationCacheSource : LocationSource{
     }
 
     override suspend fun GetLocation(latvalue: String, lonvalue: String): LocationModel {
-        OnlineLocationSource.GetLocation(latvalue,lonvalue)
-        TODO("Not yet implemented")
+        return OnlineLocationSource.GetLocation(latvalue,lonvalue)
     }
 }
 
