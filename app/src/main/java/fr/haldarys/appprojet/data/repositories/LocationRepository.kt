@@ -11,6 +11,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import fr.haldarys.appprojet.PlanYourHolidaysApplication
+import fr.haldarys.appprojet.data.sources.LocationCacheSource
+import fr.haldarys.appprojet.data.sources.OnlineLocationSource
 
 interface LocationSource{
 
@@ -59,5 +61,15 @@ object LocationRepositoryModule {
     @Provides
     fun provideLocationRepo(): LocationRepository {
         return DefaultLocationRepository()
+    }
+}
+
+@InstallIn(SingletonComponent::class)
+@Module
+object LocationSourceModule {
+    @Provides
+    @Singleton
+    fun provideLocationSource() : LocationSource {
+        return LocationCacheSource;
     }
 }

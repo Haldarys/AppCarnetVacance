@@ -1,5 +1,6 @@
 package fr.haldarys.appprojet.data.sources
 
+import androidx.room.ColumnInfo
 import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -7,8 +8,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fr.haldarys.appprojet.data.models.CountryModel
 import fr.haldarys.appprojet.data.models.LocationModel
-import fr.haldarys.appprojet.data.repositories.LocationSource
+import fr.haldarys.appprojet.data.repositories.CountrySource
+import kotlinx.coroutines.flow.Flow
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,7 +20,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Singleton
 
-object OnlineLocationSource : LocationSource {
+object OnlineCountrySource {
     private val interceptor = HttpLoggingInterceptor()
     init{
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -25,7 +28,7 @@ object OnlineLocationSource : LocationSource {
     private val client = OkHttpClient().newBuilder().addInterceptor(interceptor).build()
 
 
-    private const val BASE_URL = "https://nominatim.openstreetmap.org"
+    private const val BASE_URL = "https://countriesnow.space"
 
 
     private val moshi = Moshi.Builder()
@@ -38,31 +41,21 @@ object OnlineLocationSource : LocationSource {
         .client(client)
         .build()
 
-    data class OSMLocations(
-        val address : LocationModel
+    data class Countries(
+        val data : List<CountryModel>
     )
 
-    data class OnlineLocationModel(
-        var house_number: Int,
-        var city: String,
-        var road: String ,
-        var state: String,
-        var region: String,
-        var postCode: String ,
-        var country: String
-    )
-
-    interface OSMLocationsService {
-        @GET("reverse")
-        suspend fun GetLocation(@Query(value="format") format: String = "jsonv2", @Query(value="lat") latvalue: String, @Query(value = "lon") lonvalue : String) : OSMLocations
+    interface CountryService {
+        @GET("api/v0.1/countries/positions")
+        suspend fun getCountries() : Countries
     }
 
-    private val retrofitOSMLocationsService : OSMLocationsService by lazy{
-        retrofit.create(OSMLocationsService::class.java)
+    private val retrofitCountryService : CountryService by lazy{
+        retrofit.create(CountryService::class.java)
     }
 
-    override suspend fun GetLocation(latvalue: String,lonvalue: String): LocationModel {
-        return retrofitOSMLocationsService.GetLocation(latvalue = latvalue,lonvalue =lonvalue ).address
+    suspend fun getCountries(): List<CountryModel> {
+        return retrofitCountryService.getCountries().data
     }
 }
 
