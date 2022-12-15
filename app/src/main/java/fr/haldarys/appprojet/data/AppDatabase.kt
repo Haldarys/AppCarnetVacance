@@ -9,15 +9,18 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import fr.haldarys.appprojet.PlanYourHolidaysApplication
+import fr.haldarys.appprojet.data.models.CountryModel
 import fr.haldarys.appprojet.data.models.LocationModel
 import fr.haldarys.appprojet.data.repositories.LocationSource
+import fr.haldarys.appprojet.data.sources.CountryDao
 import fr.haldarys.appprojet.data.sources.LocationCacheSource
 import fr.haldarys.appprojet.data.sources.LocationDao
 import javax.inject.Singleton
 
-@Database(entities = arrayOf(LocationModel::class), version = 1)
+@Database(entities = [LocationModel::class, CountryModel::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun locationDao(): LocationDao
+    abstract fun countryDao(): CountryDao
 
     companion object{
         @Volatile

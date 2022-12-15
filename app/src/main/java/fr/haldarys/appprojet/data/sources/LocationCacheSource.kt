@@ -15,6 +15,9 @@ import fr.haldarys.appprojet.data.AppDatabase
 import fr.haldarys.appprojet.data.models.LocationModel
 import fr.haldarys.appprojet.data.repositories.DefaultLocationRepoEntryPoint
 import fr.haldarys.appprojet.data.repositories.LocationSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.util.Date
 
@@ -24,10 +27,10 @@ interface LocationDao{
     fun getAllLocations() : List<LocationModel>
 
     @Query("SELECT * FROM locations WHERE city = :locationCity")
-    fun getByCity(locationCity:String):List<LocationModel>
+    fun getByCity(locationCity:String): List<LocationModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(location : LocationModel?)
+    fun insert(location : LocationModel?) // Pas de liste car on n'a pas besoin de stocker toutes les location
 }
 
 

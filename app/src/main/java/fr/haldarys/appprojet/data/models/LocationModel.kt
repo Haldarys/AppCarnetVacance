@@ -14,7 +14,7 @@ import javax.annotation.Nonnull
 */
 @Entity(tableName = "locations")
 data class LocationModel (
-    @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "locationId")
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "locationId")
     var location_id : Int = 0,
 
     @Nonnull @ColumnInfo(name = "houseNumber")
@@ -39,5 +39,5 @@ data class LocationModel (
     var country: String = ""
 ) {
     constructor(house_number: Int, city: String, road: String, state: String, region: String, postCode: String, country: String)
-        : this(1, house_number, city, road, state, region, postCode, country)
+        : this(0, house_number, city, road, state, region, postCode, country)
 }
